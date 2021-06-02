@@ -1,5 +1,6 @@
 package com.example.sunset
 
+import android.animation.AnimatorSet
 import android.animation.ArgbEvaluator
 import android.animation.ObjectAnimator
 import android.os.Bundle
@@ -49,10 +50,19 @@ class MainActivity : AppCompatActivity() {
         val sunsetSkyAnimator = ObjectAnimator
             .ofInt(skyView, "backgroundColor", bluSkyColor, sunsetSkyColor)
             .setDuration(3000)
-
         sunsetSkyAnimator.setEvaluator(ArgbEvaluator())
 
-        heightAnimator.start()
-        sunsetSkyAnimator.start()
+        val nightSkyAnimator = ObjectAnimator
+            .ofInt(skyView, "backgroundColor", sunsetSkyColor, nightSkyColor)
+            .setDuration(1500)
+        nightSkyAnimator.setEvaluator(ArgbEvaluator())
+
+        val animatorSet = AnimatorSet() //одновременное воспроизведение анимаций
+        animatorSet.play(heightAnimator)
+            .with(sunsetSkyAnimator)
+            .before(nightSkyAnimator)
+        animatorSet.start()
+
+
     }
 }
